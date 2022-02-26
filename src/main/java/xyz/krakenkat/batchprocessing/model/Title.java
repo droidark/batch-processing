@@ -2,8 +2,10 @@ package xyz.krakenkat.batchprocessing.model;
 
 import lombok.*;
 import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -12,7 +14,8 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Document("title")
-public class Title {
+public class Title implements Serializable {
+    @Id
     private String id;
     private ObjectId publisher;
     private String name;

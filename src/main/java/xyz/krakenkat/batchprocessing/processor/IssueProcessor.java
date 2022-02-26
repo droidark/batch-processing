@@ -10,7 +10,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 @Slf4j
-public class IssueItemProcessor implements ItemProcessor<IssueDTO, Issue> {
+public class IssueProcessor implements ItemProcessor<IssueDTO, Issue> {
 
     DateFormat format = new SimpleDateFormat("YYYY-MM-dd");
 
