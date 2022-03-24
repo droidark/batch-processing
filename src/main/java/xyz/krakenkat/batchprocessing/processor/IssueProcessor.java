@@ -27,12 +27,30 @@ public class IssueProcessor implements ItemProcessor<IssueDTO, Issue> {
                 .printedPrice(Double.parseDouble(issueDTO.getPrintedPrice().trim()))
                 .currency(issueDTO.getCurrency().trim())
                 .releaseDate(format.parse(issueDTO.getReleaseDate().trim()))
-                .shortReview(issueDTO.getShortReview().trim())
+                .shortReview(issueDTO.getShortReview()
+                        .replace("Â¿", "¿")
+                        .replace("Â¡", "¡")
+                        .replace("Â´", "'")
+                        .replace("Ã±", "ñ")
+                        .replace("Ã‘", "Ñ")
+                        .replace("Ã¡", "á")
+                        .replace("Ã©", "é")
+                        .replace("Ã\u00AD", "í")
+                        .replace("Ã³", "ó")
+                        .replace("Ãº", "ú")
+                        .replace("Ã\u0081", "Á")
+                        .replace("Ã‰", "É")
+                        .replace("Ã\u008D", "Í")
+                        .replace("Ã“", "Ó")
+                        .replace("Ãš", "Ú")
+                        .replace("â€¦", "...")
+                        .replace("â€“", "\"")
+                        .trim())
                 .isbn10(issueDTO.getIsbn10().trim())
                 .edition(Integer.parseInt(issueDTO.getEdition().trim()))
                 .variant(Boolean.parseBoolean(issueDTO.getVariant().trim()))
                 .build();
-        log.info("Converting (" + issueDTO + ") into " + transformedIssue + ")");
+        //log.info("Converting (" + issueDTO + ") into " + transformedIssue + ")");
         return transformedIssue;
     }
 }

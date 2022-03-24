@@ -29,7 +29,7 @@ public class TitleProcessor implements ItemProcessor<TitleDTO, Title> {
                 .totalIssues(Integer.parseInt(titleDTO.getTotalIssues().trim()))
                 .releaseDate(format.parse(titleDTO.getReleaseDate().trim()))
                 .build();
-        log.info("Converting (" + titleDTO + ") into " + transformedTitle + ")");
+        //log.info("Converting (" + titleDTO + ") into " + transformedTitle + ")");
         return transformedTitle;
     }
 }

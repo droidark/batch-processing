@@ -35,7 +35,7 @@ public class TitleWriter implements ItemWriter<Title> {
 
     @AfterStep
     public void saveTransient(StepExecution stepExecution) {
-        log.info("TransientDTO size: " + transientDTOList.size());
+        //log.info("TransientDTO size: " + transientDTOList.size());
         this.stepExecution = stepExecution;
         this.stepExecution.getExecutionContext().put("transient", this.transientDTOList);
     }

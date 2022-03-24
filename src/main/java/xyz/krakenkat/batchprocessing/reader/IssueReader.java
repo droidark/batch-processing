@@ -40,7 +40,7 @@ public class IssueReader implements ItemReader<IssueDTO> {
         JobExecution jobExecution = stepExecution.getJobExecution();
         ExecutionContext jobContext = jobExecution.getExecutionContext();
         this.transientDTOList = (List<TransientDTO>) jobContext.get("transient");
-        log.info("transient: " + this.transientDTOList);
+        //log.info("transient: " + this.transientDTOList);
         buildList();
     }
 
@@ -53,7 +53,6 @@ public class IssueReader implements ItemReader<IssueDTO> {
     private void readCSV(TransientDTO transientDTO) {
         try {
             Reader reader = Files.newBufferedReader(Paths.get(ClassLoader.getSystemResource("panini-manga-mx/" + transientDTO.getKey() + ".csv").toURI()));
-
             CSVFormat csvFormat = CSVFormat
                     .DEFAULT
                     .builder()
@@ -82,7 +81,7 @@ public class IssueReader implements ItemReader<IssueDTO> {
                         .build());
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
+            log.info("Error parsing " + transientDTO.getKey());
         }
     }
 }
