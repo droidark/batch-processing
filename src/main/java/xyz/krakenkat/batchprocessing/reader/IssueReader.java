@@ -52,7 +52,7 @@ public class IssueReader implements ItemReader<IssueDTO> {
 
     private void readCSV(TransientDTO transientDTO) {
         try {
-            Reader reader = Files.newBufferedReader(Paths.get(ClassLoader.getSystemResource("panini-manga-mx/" + transientDTO.getKey() + ".csv").toURI()));
+            Reader reader = Files.newBufferedReader(Paths.get(ClassLoader.getSystemResource("kamite-manga/" + transientDTO.getKey() + ".csv").toURI()));
             CSVFormat csvFormat = CSVFormat
                     .DEFAULT
                     .builder()

@@ -70,7 +70,7 @@ public class BatchConfiguration {
     public FlatFileItemReader<TitleDTO> titleReader() {
         return new FlatFileItemReaderBuilder<TitleDTO>()
                 .name("titleReader")
-                .resource(new ClassPathResource("panini-manga-titles.csv"))
+                .resource(new ClassPathResource("kamite-manga-titles.csv"))
                 .delimited()
                 .delimiter(DELIMITER)
                 .names(TITLES_HEADER).fieldSetMapper(new BeanWrapperFieldSetMapper<TitleDTO>() {{
