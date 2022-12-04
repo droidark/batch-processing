@@ -1,6 +1,6 @@
 package xyz.krakenkat.batchprocessing;
 
-import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -8,15 +8,15 @@ import org.springframework.batch.core.configuration.annotation.EnableBatchProces
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.listener.ExecutionContextPromotionListener;
-import org.springframework.batch.item.data.MongoItemWriter;
-import org.springframework.batch.item.data.builder.MongoItemWriterBuilder;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.data.mongodb.core.MongoOperations;
 import xyz.krakenkat.batchprocessing.dto.IssueDTO;
 import xyz.krakenkat.batchprocessing.dto.TitleDTO;
 import xyz.krakenkat.batchprocessing.model.Issue;
@@ -24,19 +24,22 @@ import xyz.krakenkat.batchprocessing.model.Title;
 import xyz.krakenkat.batchprocessing.processor.IssueProcessor;
 import xyz.krakenkat.batchprocessing.processor.TitleProcessor;
 import xyz.krakenkat.batchprocessing.reader.IssueReader;
+import xyz.krakenkat.batchprocessing.writer.IssueWriter;
 import xyz.krakenkat.batchprocessing.writer.TitleWriter;
 
-@Configuration
+
 @Slf4j
+@ComponentScan
+@Configuration
 @EnableBatchProcessing
-@AllArgsConstructor
+@NoArgsConstructor
 public class BatchConfiguration {
 
+    @Autowired
     private JobBuilderFactory jobBuilderFactory;
 
+    @Autowired
     private StepBuilderFactory stepBuilderFactory;
-
-    private MongoOperations mongoOperations;
 
     private final String DELIMITER = "|";
 
@@ -46,10 +49,13 @@ public class BatchConfiguration {
             "COVER",
             "DEMOGRAPHY",
             "FORMAT",
+            "TYPE",
             "FREQUENCY",
             "STATUS",
             "TOTAL ISSUES",
-            "RELEASE DATE"};
+            "RELEASE DATE",
+            "GENRES",
+            "AUTHORS"};
 
     private final String[] ISSUES_HEADER = {"TITLE",
             "NAME",
@@ -66,11 +72,15 @@ public class BatchConfiguration {
             "VARIANT"
     };
 
+    @Value("${batch-execution.file-name}")
+    private String csvFile;
+
     @Bean
     public FlatFileItemReader<TitleDTO> titleReader() {
+        System.out.println(csvFile);
         return new FlatFileItemReaderBuilder<TitleDTO>()
                 .name("titleReader")
-                .resource(new ClassPathResource("kamite-manga-titles.csv"))
+                .resource(new ClassPathResource(csvFile + ".csv"))
                 .delimited()
                 .delimiter(DELIMITER)
                 .names(TITLES_HEADER).fieldSetMapper(new BeanWrapperFieldSetMapper<TitleDTO>() {{
@@ -79,20 +89,6 @@ public class BatchConfiguration {
                 .linesToSkip(1)
                 .build();
     }
-
-//    @Bean
-//    public FlatFileItemReader<IssueDTO> issueReader() {
-//        return new FlatFileItemReaderBuilder<IssueDTO>()
-//                .name("issueReader")
-//                .resource(new ClassPathResource("maid-sama.csv"))
-//                .delimited()
-//                .delimiter(DELIMITER)
-//                .names(ISSUES_HEADER)
-//                .fieldSetMapper(new BeanWrapperFieldSetMapper<IssueDTO>() {{
-//                    setTargetType(IssueDTO.class);
-//                }}).linesToSkip(1)
-//                .build();
-//    }
 
     @Bean
     public IssueReader issueReader() {
@@ -114,8 +110,8 @@ public class BatchConfiguration {
     }
 
     @Bean
-    public MongoItemWriter<Issue> issueWriter() {
-        return new MongoItemWriterBuilder<Issue>().template(mongoOperations).collection("issue").build();
+    public IssueWriter issueWriter() {
+        return new IssueWriter();
     }
 
     @Bean
@@ -133,7 +129,8 @@ public class BatchConfiguration {
     @Bean
     public Step issueStep() {
         return stepBuilderFactory
-                .get("issueStep").<IssueDTO, Issue> chunk(1)
+                .get("issueStep")
+                .<IssueDTO, Issue> chunk(1)
                 .reader(issueReader())
                 .processor(issueItemProcessor())
                 .writer(issueWriter())

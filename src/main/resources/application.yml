@@ -7,4 +7,6 @@ spring:
 logging:
   level:
     org.springframework.data.mongodb.core.MongoTemplate: DEBUG
-batchExecution: 'TITLE'
+batch-execution:
+  file-name: panini-manga-titles
+  folder: panini-manga-mx

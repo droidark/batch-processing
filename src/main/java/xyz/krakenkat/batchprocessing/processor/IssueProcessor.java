@@ -12,7 +12,7 @@ import java.text.SimpleDateFormat;
 @Slf4j
 public class IssueProcessor implements ItemProcessor<IssueDTO, Issue> {
 
-    DateFormat format = new SimpleDateFormat("YYYY-MM-dd");
+    DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
     @Override
     public Issue process(final IssueDTO issueDTO) throws Exception {
@@ -46,7 +46,7 @@ public class IssueProcessor implements ItemProcessor<IssueDTO, Issue> {
                         .replace("â€¦", "...")
                         .replace("â€“", "\"")
                         .trim())
-                .isbn10(issueDTO.getIsbn10().trim())
+                .isbn(issueDTO.getIsbn10().equals("") ? "000-0-00-000000-0" : issueDTO.getIsbn10().trim())
                 .edition(Integer.parseInt(issueDTO.getEdition().trim()))
                 .variant(Boolean.parseBoolean(issueDTO.getVariant().trim()))
                 .build();

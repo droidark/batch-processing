@@ -6,6 +6,8 @@ import org.springframework.batch.core.annotation.AfterStep;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import xyz.krakenkat.batchprocessing.dto.TransientDTO;
 import xyz.krakenkat.batchprocessing.model.Title;
 
@@ -26,10 +28,25 @@ public class TitleWriter implements ItemWriter<Title> {
 
     @Override
     public void write(List<? extends Title> list) throws Exception {
+        Title savedTitle;
         for(Title title : list) {
-            Title savedTitle = mongoOperations.save(title, COLLECTION_NAME);
+            Title dbTitle = mongoOperations.findOne(
+                    Query.query(
+                            Criteria
+                                    .where("publisher")
+                                    .is(title.getPublisher())
+                                    .and("key")
+                                    .is(title.getKey())),
+                            Title.class,
+                    COLLECTION_NAME);
+
+            if (dbTitle == null) {
+                savedTitle = mongoOperations.save(title, COLLECTION_NAME);
+            } else {
+                savedTitle = dbTitle;
+                log.info("The title " + savedTitle.getName() + " already exists");
+            }
             this.transientDTOList.add(TransientDTO.builder().key(savedTitle.getKey()).id(savedTitle.getId()).build());
-            log.info("Getting id: " + savedTitle.getId());
         }
     }
 

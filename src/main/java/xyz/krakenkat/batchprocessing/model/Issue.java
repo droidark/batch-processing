@@ -29,8 +29,7 @@ public class Issue {
     private String shortReview;
     private String event;
     private String storyArch;
-    private String isbn10;
-    private String isbn13;
+    private String isbn;
     private Long barcode;
     private Integer edition;
     private Boolean variant;

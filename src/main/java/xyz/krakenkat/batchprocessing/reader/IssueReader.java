@@ -1,5 +1,6 @@
 package xyz.krakenkat.batchprocessing.reader;
 
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -9,6 +10,7 @@ import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.annotation.BeforeStep;
 import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.ItemReader;
+import org.springframework.beans.factory.annotation.Value;
 import xyz.krakenkat.batchprocessing.dto.IssueDTO;
 import xyz.krakenkat.batchprocessing.dto.TransientDTO;
 
@@ -19,12 +21,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
+@NoArgsConstructor
 public class IssueReader implements ItemReader<IssueDTO> {
 
     private int i = -1;
     private static final char DELIMITER = '|';
     private List<TransientDTO> transientDTOList;
     private List<IssueDTO> issueDTOList = new ArrayList<>();
+
+    @Value("${batch-execution.folder}")
+    private String folder;
 
     @Override
     public IssueDTO read() throws Exception {
@@ -52,7 +58,7 @@ public class IssueReader implements ItemReader<IssueDTO> {
 
     private void readCSV(TransientDTO transientDTO) {
         try {
-            Reader reader = Files.newBufferedReader(Paths.get(ClassLoader.getSystemResource("kamite-manga/" + transientDTO.getKey() + ".csv").toURI()));
+            Reader reader = Files.newBufferedReader(Paths.get(ClassLoader.getSystemResource(folder + "/" + transientDTO.getKey() + ".csv").toURI()));
             CSVFormat csvFormat = CSVFormat
                     .DEFAULT
                     .builder()
@@ -81,7 +87,7 @@ public class IssueReader implements ItemReader<IssueDTO> {
                         .build());
             }
         } catch (Exception ex) {
-            log.info("Error parsing " + transientDTO.getKey());
+            ex.printStackTrace();
         }
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @AllArgsConstructor
@@ -23,9 +24,11 @@ public class Title implements Serializable {
     private String cover;
     private String demography;
     private String format;
+    private String type;
     private String frequency;
     private String status;
     private Integer totalIssues;
     private Date releaseDate;
     private List<String> genres;
+    private Map<String, List<String>> authors;
 }
