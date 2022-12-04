@@ -7,4 +7,12 @@ spring:
 logging:
   level:
     org.springframework.data.mongodb.core.MongoTemplate: DEBUG
-batchExecution: 'TITLE'
+batch-execution:
+  datasource:
+    h2:
+      jdbc-url: jdbc:h2:mem:mydb
+      username: sa
+      password: password
+      driver-class-name: org.h2.Driver
+  file-name: panini-manga-titles
+  folder: panini-manga-mx

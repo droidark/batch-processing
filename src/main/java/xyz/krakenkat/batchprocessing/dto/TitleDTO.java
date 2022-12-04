@@ -14,8 +14,13 @@ public class TitleDTO {
     private String cover;
     private String demography;
     private String format;
+    private String type;
     private String frequency;
     private String status;
     private String totalIssues;
     private String releaseDate;
+    private String genres;
+    private String authors;
+    private String whakoomUrl;
+    private String publisherUrl;
 }

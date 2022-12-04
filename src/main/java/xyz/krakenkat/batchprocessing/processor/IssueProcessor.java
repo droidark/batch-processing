@@ -3,8 +3,10 @@ package xyz.krakenkat.batchprocessing.processor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.batch.item.ItemProcessor;
-import xyz.krakenkat.batchprocessing.model.Issue;
+import xyz.krakenkat.batchprocessing.model.mongo.Issue;
 import xyz.krakenkat.batchprocessing.dto.IssueDTO;
+import xyz.krakenkat.batchprocessing.util.Constants;
+import xyz.krakenkat.batchprocessing.util.Utilities;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -12,11 +14,11 @@ import java.text.SimpleDateFormat;
 @Slf4j
 public class IssueProcessor implements ItemProcessor<IssueDTO, Issue> {
 
-    DateFormat format = new SimpleDateFormat("YYYY-MM-dd");
+    private final DateFormat format = new SimpleDateFormat(Constants.DATE_FORMAT);
 
     @Override
     public Issue process(final IssueDTO issueDTO) throws Exception {
-        final Issue transformedIssue = Issue
+        return Issue
                 .builder()
                 .title(new ObjectId(issueDTO.getTitle().trim()))
                 .name(issueDTO.getName().trim())
@@ -27,30 +29,10 @@ public class IssueProcessor implements ItemProcessor<IssueDTO, Issue> {
                 .printedPrice(Double.parseDouble(issueDTO.getPrintedPrice().trim()))
                 .currency(issueDTO.getCurrency().trim())
                 .releaseDate(format.parse(issueDTO.getReleaseDate().trim()))
-                .shortReview(issueDTO.getShortReview()
-                        .replace("Â¿", "¿")
-                        .replace("Â¡", "¡")
-                        .replace("Â´", "'")
-                        .replace("Ã±", "ñ")
-                        .replace("Ã‘", "Ñ")
-                        .replace("Ã¡", "á")
-                        .replace("Ã©", "é")
-                        .replace("Ã\u00AD", "í")
-                        .replace("Ã³", "ó")
-                        .replace("Ãº", "ú")
-                        .replace("Ã\u0081", "Á")
-                        .replace("Ã‰", "É")
-                        .replace("Ã\u008D", "Í")
-                        .replace("Ã“", "Ó")
-                        .replace("Ãš", "Ú")
-                        .replace("â€¦", "...")
-                        .replace("â€“", "\"")
-                        .trim())
-                .isbn10(issueDTO.getIsbn10().trim())
+                .shortReview(Utilities.formatText(issueDTO.getShortReview()))
+                .isbn(issueDTO.getIsbn10().isEmpty() ? Constants.ISBN : issueDTO.getIsbn10().trim())
                 .edition(Integer.parseInt(issueDTO.getEdition().trim()))
                 .variant(Boolean.parseBoolean(issueDTO.getVariant().trim()))
                 .build();
-        //log.info("Converting (" + issueDTO + ") into " + transformedIssue + ")");
-        return transformedIssue;
     }
 }
