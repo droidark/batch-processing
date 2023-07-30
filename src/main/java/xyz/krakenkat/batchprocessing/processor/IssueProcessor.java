@@ -12,11 +12,11 @@ import java.text.SimpleDateFormat;
 @Slf4j
 public class IssueProcessor implements ItemProcessor<IssueDTO, Issue> {
 
-    DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+    private final DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
     @Override
     public Issue process(final IssueDTO issueDTO) throws Exception {
-        final Issue transformedIssue = Issue
+        return Issue
                 .builder()
                 .title(new ObjectId(issueDTO.getTitle().trim()))
                 .name(issueDTO.getName().trim())
@@ -50,7 +50,5 @@ public class IssueProcessor implements ItemProcessor<IssueDTO, Issue> {
                 .edition(Integer.parseInt(issueDTO.getEdition().trim()))
                 .variant(Boolean.parseBoolean(issueDTO.getVariant().trim()))
                 .build();
-        //log.info("Converting (" + issueDTO + ") into " + transformedIssue + ")");
-        return transformedIssue;
     }
 }

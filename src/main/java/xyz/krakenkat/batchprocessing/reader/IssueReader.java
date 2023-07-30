@@ -27,13 +27,13 @@ public class IssueReader implements ItemReader<IssueDTO> {
     private int i = -1;
     private static final char DELIMITER = '|';
     private List<TransientDTO> transientDTOList;
-    private List<IssueDTO> issueDTOList = new ArrayList<>();
+    private final List<IssueDTO> issueDTOList = new ArrayList<>();
 
     @Value("${batch-execution.folder}")
     private String folder;
 
     @Override
-    public IssueDTO read() throws Exception {
+    public IssueDTO read() {
         if (i < this.issueDTOList.size() - 1) {
             i++;
             return issueDTOList.get(i);
@@ -57,35 +57,36 @@ public class IssueReader implements ItemReader<IssueDTO> {
     }
 
     private void readCSV(TransientDTO transientDTO) {
-        try {
-            Reader reader = Files.newBufferedReader(Paths.get(ClassLoader.getSystemResource(folder + "/" + transientDTO.getKey() + ".csv").toURI()));
+        try (Reader reader = Files.newBufferedReader(Paths.get(ClassLoader.getSystemResource(folder + "/" + transientDTO.getKey() + ".csv").toURI()))) {
+
             CSVFormat csvFormat = CSVFormat
-                    .DEFAULT
-                    .builder()
-                    .setDelimiter(DELIMITER)
-                    .setHeader()
-                    .setSkipHeaderRecord(true)
-                    .build();
+                        .DEFAULT
+                        .builder()
+                        .setDelimiter(DELIMITER)
+                        .setHeader()
+                        .setSkipHeaderRecord(true)
+                        .build();
 
-            CSVParser csvParser = new CSVParser(reader, csvFormat);
+                issueDTOList.addAll(new CSVParser(reader, csvFormat)
+                        .stream()
+                        .map(rec -> IssueDTO
+                                .builder()
+                                .title(transientDTO.getId())
+                                .name(rec.get(0))
+                                .key(rec.get(1))
+                                .number(rec.get(2))
+                                .cover(rec.get(3))
+                                .pages(rec.get(4))
+                                .printedPrice(rec.get(5))
+                                .currency(rec.get(6))
+                                .releaseDate(rec.get(7))
+                                .shortReview(rec.get(8))
+                                .isbn10(rec.get(9))
+                                .edition(rec.get(10))
+                                .variant(rec.get(11))
+                                .build())
+                        .toList());
 
-            for (CSVRecord csvRecord : csvParser) {
-                this.issueDTOList.add(IssueDTO.builder()
-                        .title(transientDTO.getId())
-                        .name(csvRecord.get(0))
-                        .key(csvRecord.get(1))
-                        .number(csvRecord.get(2))
-                        .cover(csvRecord.get(3))
-                        .pages(csvRecord.get(4))
-                        .printedPrice(csvRecord.get(5))
-                        .currency(csvRecord.get(6))
-                        .releaseDate(csvRecord.get(7))
-                        .shortReview(csvRecord.get(8))
-                        .isbn10(csvRecord.get(9))
-                        .edition(csvRecord.get(10))
-                        .variant(csvRecord.get(11))
-                        .build());
-            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }

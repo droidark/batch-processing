@@ -38,8 +38,8 @@ public class TitleProcessor implements ItemProcessor<TitleDTO, Title> {
     private Map<String, List<String>> getAuthors(String authors) {
         Map<String, List<String>> creators = new HashMap<>();
         String[] division = authors.split(";");
-        for (int i = 0; i < division.length; i++) {
-            String[] subdiv = division[i].split(":");
+        for (String s : division) {
+            String[] subdiv = s.split(":");
             List<String> names = Arrays.stream(subdiv[1].split(",")).map(String::trim).toList();
             creators.put(subdiv[0]
                     .replace("Writer", "story by")
