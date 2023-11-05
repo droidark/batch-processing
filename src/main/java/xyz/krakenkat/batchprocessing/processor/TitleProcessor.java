@@ -14,11 +14,7 @@ import java.util.*;
 @Slf4j
 public class TitleProcessor implements ItemProcessor<TitleDTO, Title> {
 
-<<<<<<< HEAD
     DateFormat format = new SimpleDateFormat(Constants.DATE_FORMAT);
-=======
-    DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
->>>>>>> f6139b48ec7d3bf6e2c8828f9c2dd60036cca289
 
     @Override
     public Title process(final TitleDTO titleDTO) throws Exception {
@@ -38,8 +34,6 @@ public class TitleProcessor implements ItemProcessor<TitleDTO, Title> {
                 .genres(Arrays.stream(titleDTO.getGenres().split(",")).map(String::trim).toList())
                 .authors(getAuthors(titleDTO.getAuthors()))
                 .build();
-<<<<<<< HEAD
-=======
     }
 
     private Map<String, List<String>> getAuthors(String authors) {
@@ -55,25 +49,6 @@ public class TitleProcessor implements ItemProcessor<TitleDTO, Title> {
                     .trim()
                     .toLowerCase(Locale.ROOT), names);
         }
-        return  creators;
->>>>>>> f6139b48ec7d3bf6e2c8828f9c2dd60036cca289
+        return creators;
     }
-
-    private Map<String, List<String>> getAuthors(String authors) {
-        Map<String, List<String>> creators = new HashMap<>();
-        String[] division = authors.split(";");
-        for (String s : division) {
-            String[] subdiv = s.split(":");
-            List<String> names = Arrays.stream(subdiv[1].split(",")).map(String::trim).toList();
-            creators.put(subdiv[0]
-                    .replace("Writer", "story by")
-                    .replace("Illustrator", "art by")
-                    .replace("Author", "created by")
-                    .trim()
-                    .toLowerCase(Locale.ROOT), names);
-        }
-        return  creators;
-    }
-
-
 }

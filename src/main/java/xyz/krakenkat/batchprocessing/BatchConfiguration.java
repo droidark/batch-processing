@@ -46,11 +46,7 @@ public class BatchConfiguration {
                 .delimited()
                 .delimiter(Constants.DELIMITER)
                 .names(Constants.TITLES_HEADER)
-<<<<<<< HEAD
                 .fieldSetMapper(new BeanWrapperFieldSetMapper<>() {{
-=======
-                .fieldSetMapper(new BeanWrapperFieldSetMapper<TitleDTO>() {{
->>>>>>> f6139b48ec7d3bf6e2c8828f9c2dd60036cca289
                     setTargetType(TitleDTO.class);
                 }})
                 .linesToSkip(1)
