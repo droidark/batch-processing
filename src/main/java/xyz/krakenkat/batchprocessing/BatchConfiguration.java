@@ -39,13 +39,18 @@ public class BatchConfiguration {
 
     @Bean
     public FlatFileItemReader<TitleDTO> titleReader() {
+        System.out.println(csvFile);
         return new FlatFileItemReaderBuilder<TitleDTO>()
                 .name("titleReader")
                 .resource(new ClassPathResource(csvFile + ".csv"))
                 .delimited()
                 .delimiter(Constants.DELIMITER)
                 .names(Constants.TITLES_HEADER)
+<<<<<<< HEAD
                 .fieldSetMapper(new BeanWrapperFieldSetMapper<>() {{
+=======
+                .fieldSetMapper(new BeanWrapperFieldSetMapper<TitleDTO>() {{
+>>>>>>> f6139b48ec7d3bf6e2c8828f9c2dd60036cca289
                     setTargetType(TitleDTO.class);
                 }})
                 .linesToSkip(1)

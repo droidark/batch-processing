@@ -21,6 +21,9 @@ public class TitleDTO {
     private String releaseDate;
     private String genres;
     private String authors;
+<<<<<<< HEAD
     private String whakoomUrl;
     private String publisherUrl;
+=======
+>>>>>>> f6139b48ec7d3bf6e2c8828f9c2dd60036cca289
 }

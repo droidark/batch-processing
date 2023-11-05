@@ -14,7 +14,11 @@ import java.text.SimpleDateFormat;
 @Slf4j
 public class IssueProcessor implements ItemProcessor<IssueDTO, Issue> {
 
+<<<<<<< HEAD
     private final DateFormat format = new SimpleDateFormat(Constants.DATE_FORMAT);
+=======
+    private final DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+>>>>>>> f6139b48ec7d3bf6e2c8828f9c2dd60036cca289
 
     @Override
     public Issue process(final IssueDTO issueDTO) throws Exception {
@@ -29,8 +33,31 @@ public class IssueProcessor implements ItemProcessor<IssueDTO, Issue> {
                 .printedPrice(Double.parseDouble(issueDTO.getPrintedPrice().trim()))
                 .currency(issueDTO.getCurrency().trim())
                 .releaseDate(format.parse(issueDTO.getReleaseDate().trim()))
+<<<<<<< HEAD
                 .shortReview(Utilities.formatText(issueDTO.getShortReview()))
                 .isbn(issueDTO.getIsbn10().isEmpty() ? Constants.ISBN : issueDTO.getIsbn10().trim())
+=======
+                .shortReview(issueDTO.getShortReview()
+                        .replace("Â¿", "¿")
+                        .replace("Â¡", "¡")
+                        .replace("Â´", "'")
+                        .replace("Ã±", "ñ")
+                        .replace("Ã‘", "Ñ")
+                        .replace("Ã¡", "á")
+                        .replace("Ã©", "é")
+                        .replace("Ã\u00AD", "í")
+                        .replace("Ã³", "ó")
+                        .replace("Ãº", "ú")
+                        .replace("Ã\u0081", "Á")
+                        .replace("Ã‰", "É")
+                        .replace("Ã\u008D", "Í")
+                        .replace("Ã“", "Ó")
+                        .replace("Ãš", "Ú")
+                        .replace("â€¦", "...")
+                        .replace("â€“", "\"")
+                        .trim())
+                .isbn(issueDTO.getIsbn10().equals("") ? "000-0-00-000000-0" : issueDTO.getIsbn10().trim())
+>>>>>>> f6139b48ec7d3bf6e2c8828f9c2dd60036cca289
                 .edition(Integer.parseInt(issueDTO.getEdition().trim()))
                 .variant(Boolean.parseBoolean(issueDTO.getVariant().trim()))
                 .build();

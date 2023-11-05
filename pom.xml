@@ -5,7 +5,11 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
+<<<<<<< HEAD
         <version>3.1.5</version>
+=======
+        <version>3.1.0</version>
+>>>>>>> f6139b48ec7d3bf6e2c8828f9c2dd60036cca289
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>xyz.krakenkat</groupId>

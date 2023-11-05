@@ -7,7 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+<<<<<<< HEAD
 import xyz.krakenkat.batchprocessing.model.mongo.Issue;
+=======
+import xyz.krakenkat.batchprocessing.model.Issue;
+>>>>>>> f6139b48ec7d3bf6e2c8828f9c2dd60036cca289
 
 @Slf4j
 public class IssueWriter implements ItemWriter<Issue> {

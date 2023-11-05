@@ -55,16 +55,24 @@ public class IssueReader implements ItemReader<IssueDTO> {
     }
 
     private void readCSV(TransientDTO transientDTO) {
+<<<<<<< HEAD
         try (Reader reader = Files
                 .newBufferedReader(Paths.get(ClassLoader
                         .getSystemResource(folder + "/" + transientDTO.getKey() + Constants.FILE_EXTENSION)
                         .toURI()
                 ))) {
+=======
+        try (Reader reader = Files.newBufferedReader(Paths.get(ClassLoader.getSystemResource(folder + "/" + transientDTO.getKey() + ".csv").toURI()))) {
+>>>>>>> f6139b48ec7d3bf6e2c8828f9c2dd60036cca289
 
             CSVFormat csvFormat = CSVFormat
                         .DEFAULT
                         .builder()
+<<<<<<< HEAD
                         .setDelimiter(Constants.DELIMITER)
+=======
+                        .setDelimiter(DELIMITER)
+>>>>>>> f6139b48ec7d3bf6e2c8828f9c2dd60036cca289
                         .setHeader()
                         .setSkipHeaderRecord(true)
                         .build();
